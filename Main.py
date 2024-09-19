@@ -8,6 +8,25 @@ from BluetoothManager import scan_ble_devices
 from BrainWaveManager import connect_to_board, release_board, write_as_csv
 from PortManager import find_device
 
+def get_bluetooth_adapter_address():
+    try:
+        # This method works on Linux
+        with open('/sys/class/bluetooth/hci0/address', 'r') as f:
+            return f.read().strip()
+    except:
+        pass
+    
+    try:
+        # This method works on Windows
+        import winreg
+        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r'SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\BluetoothAddress') as key:
+            addr = winreg.QueryValueEx(key, '')[0]
+            return ':'.join([f'{addr:012X}'[i:i+2] for i in range(0, 12, 2)])
+    except:
+        pass
+    
+    return None
+
 def start_socket_server(board, host='0.0.0.0', port=5000):
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -39,16 +58,30 @@ def start_socket_server(board, host='0.0.0.0', port=5000):
 
 def start_bluetooth_server(board):
     server_sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-    port = 6  # You can choose any port between 1 and 30
-    try:
-        server_sock.bind(("00:1A:7D:DA:71:13", port))
-    except socket.error as e:
-        print(f"Bluetooth socket binding failed: {e}")
+    port = 1  # Start with port 1
+
+    # bluetooth_address = get_bluetooth_adapter_address()
+    # if not bluetooth_address:
+    #     print("Could not determine Bluetooth adapter address. Please specify it manually.")
+    #     return
+
+    # print(f"Using Bluetooth address: {bluetooth_address}")
+
+    while port <= 30:
+        try:
+            server_sock.bind(("00:1A:7D:DA:71:13", port))
+            break
+        except socket.error as e:
+            print(f"Binding to port {port} failed: {e}")
+            port += 1
+
+    if port > 30:
+        print("Could not bind to any port. Exiting.")
         return
 
     server_sock.listen(1)
+    print(f"Waiting for Bluetooth connection on port {port}...")
 
-    print("Waiting for Bluetooth connection...")
     try:
         client_sock, client_info = server_sock.accept()
         print(f"Accepted connection from {client_info}")
@@ -57,12 +90,20 @@ def start_bluetooth_server(board):
             data = board.get_current_board_data(20)  # Get latest data points
             if data is not None and data.size > 0:
                 json_data = json.dumps(data.tolist())
-                client_sock.send(json_data.encode())
+                try:
+                    client_sock.send(json_data.encode())
+                except socket.error as e:
+                    print(f"Error sending data: {e}")
+                    break
             time.sleep(0.1)  # Adjust the delay as needed
+    except socket.error as e:
+        print(f"Socket error: {e}")
     except Exception as e:
         print(f"Error in Bluetooth server: {e}")
     finally:
-        client_sock.close()
+        print("Closing connections...")
+        if 'client_sock' in locals():
+            client_sock.close()
         server_sock.close()
 
 def main():
@@ -97,7 +138,7 @@ def main():
                 board = connect_to_board(mac_address, serial_number, serial_port)
                 board.start_stream()
                 print("Board connected and streaming. Starting Bluetooth server...")
-                start_socket_server(board)
+                start_bluetooth_server(board)
             except Exception as e:
                 print(f"Error: {e}. Please ensure Bluetooth is available and enabled on your device.")
             finally:
@@ -110,6 +151,7 @@ def main():
                         print("No data available to write to CSV.")
     else:
         print("No devices are found!")
+
 
 if __name__ == "__main__":
     main()
