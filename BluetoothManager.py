@@ -3,7 +3,7 @@ from bleak import BleakScanner
 import bluetooth
 import time
 import json
-
+import numpy as np
 
 async def scan_ble_devices():
     devices_list = []
@@ -43,20 +43,26 @@ def start_bluetooth_server(board):
         sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
         sock.connect((host, port))
         
-        data = board.get_current_board_data(20)
-        if data is not None and data.size > 0:
-            json_data = json.dumps(data.tolist())
-            try:
-                sock.send(json_data.encode())
-                
-                time.sleep(5)
+        while True:
+            data = board.get_current_board_data(10)  # Get 10 data points
+            if data is not None and data.size > 0:
+                # Convert data to a list of 10 points (assuming single channel)
+                data_list = data[0, :10].tolist()
+                json_data = json.dumps(data_list)
+                try:
+                    sock.send(json_data.encode())
+                    print("Data sent:", json_data)
+                except Exception as e:
+                    print(f"Error sending data: {e}")
+                    break
+            
+            time.sleep(5)  # Wait for 5 seconds before sending next batch
 
-                print("Closing connection")
-                sock.close()
-            except Exception as e:
-                print(f"Error sending data: {e}")
-        
     except bluetooth.BluetoothError as e:
         print(f"Bluetooth Error: {e}")
     except Exception as e:
         print(f"Unexpected error: {e}")
+    finally:
+        sock.close()
+        print("Connection closed")
+

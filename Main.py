@@ -40,14 +40,14 @@ def main():
                 start_bluetooth_server(board)
             except Exception as e:
                 print(f"Error: {e}. Please ensure Bluetooth is available and enabled on your device.")
-            finally:
-                if board is not None:
-                    data = board.get_current_board_data(20)
-                    release_board(board)
-                    if data is not None and data.size > 0:
-                        write_as_csv(data)
-                    else:
-                        print("No data available to write to CSV.")
+            # finally:
+            #     if board is not None:
+            #         data = board.get_current_board_data(20)
+            #         release_board(board)
+            #         if data is not None and data.size > 0:
+            #             write_as_csv(data)
+            #         else:
+            #             print("No data available to write to CSV.")
     else:
         print("No devices are found!")
 
