@@ -13,7 +13,7 @@ def handle_client(client_sock, client_info, board):
             data = board.get_current_board_data(10)  # Get 10 data points
             if data is not None and data.size > 0:
                 data_list = data[0, :10].tolist()
-                json_data = json.dumps(data_list)
+                json_data = json.dumps({"data": data_list})
                 client_sock.send(json_data.encode())
                 print(f"Data sent to {client_info}: {json_data}")
             time.sleep(1)  # Wait for 1 second before sending next batch
