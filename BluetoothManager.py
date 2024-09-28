@@ -5,17 +5,36 @@ import time
 import json
 import numpy as np
 import threading
+from datetime import datetime
+import random
 
 def handle_client(client_sock, client_info, board):
     print(f"Handling connection from {client_info}")
     try:
+        last_seizure_time = time.time() - 10
         while True:
             data = board.get_current_board_data(10)  # Get 10 data points
             if data is not None and data.size > 0:
                 data_list = data[0, :10].tolist()
-                json_data = json.dumps({"data": data_list})
+                current_time = time.time()
+                if current_time - last_seizure_time >= 10:
+                    seizure_detected = random.choice([True, False])
+                    if seizure_detected:
+                        last_seizure_time = current_time
+                        timestamp = datetime.now().isoformat()
+                        json_data = json.dumps({
+                            "data": data_list,
+                            "seizure_detected": True,
+                            "timestamp": timestamp
+                        })
+                    else:
+                        json_data = json.dumps({"data": data_list})
+                else:
+                    json_data = json.dumps({"data": data_list})
+                
                 client_sock.send(json_data.encode())
                 print(f"Data sent to {client_info}: {json_data}")
+
             time.sleep(1)  # Wait for 1 second before sending next batch
     except bluetooth.BluetoothError as e:
         print(f"Bluetooth Error with {client_info}: {e}")
