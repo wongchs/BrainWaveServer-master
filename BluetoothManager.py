@@ -21,7 +21,7 @@ def handle_client(client_sock, client_info, board):
                     seizure_detected = random.choice([True, False])
                     if seizure_detected:
                         last_seizure_time = current_time
-                        timestamp = datetime.now().isoformat()
+                        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                         json_data = json.dumps({
                             "data": data_list,
                             "seizure_detected": True,
