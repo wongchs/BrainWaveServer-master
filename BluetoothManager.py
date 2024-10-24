@@ -58,53 +58,6 @@ async def scan_ble_devices():
     return devices_list
 
 
-# directly send to phone via mac address
-# def start_bluetooth_server(board):
-#     port = 4
-#     uuid = "00001101-0000-1000-8000-00805F9B34FB"
-#     phone_mac_address = "00:B5:D0:BB:45:30"
-    
-#     try:
-#         print(f"Searching for service on {phone_mac_address}...")
-#         service_matches = bluetooth.find_service(uuid=uuid, address=phone_mac_address)
-        
-#         if len(service_matches) == 0:
-#             print("Couldn't find the specified service.")
-#             return
-
-#         first_match = service_matches[0]
-#         port = first_match["port"]
-#         name = first_match["name"]
-#         host = first_match["host"]
-
-#         print(f"Connecting to \"{name}\" on {host}")
-
-#         sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-#         sock.connect((host, port))
-        
-#         while True:
-#             data = board.get_current_board_data(10)  # Get 10 data points
-#             if data is not None and data.size > 0:
-#                 # Convert data to a list of 10 points (assuming single channel)
-#                 data_list = data[0, :10].tolist()
-#                 json_data = json.dumps(data_list)
-#                 try:
-#                     sock.send(json_data.encode())
-#                     print("Data sent:", json_data)
-#                 except Exception as e:
-#                     print(f"Error sending data: {e}")
-#                     break
-            
-#             time.sleep(5)  # Wait for 5 seconds before sending next batch
-
-#     except bluetooth.BluetoothError as e:
-#         print(f"Bluetooth Error: {e}")
-#     except Exception as e:
-#         print(f"Unexpected error: {e}")
-#     finally:
-#         sock.close()
-#         print("Connection closed")
-
 # device as the main bluetooth server, accept connection from android clients
 def start_bluetooth_server(board):
     server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
