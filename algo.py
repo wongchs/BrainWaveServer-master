@@ -80,8 +80,6 @@ num_classes = 2
 y_train = tf.keras.utils.to_categorical(y_train, num_classes)
 y_test = tf.keras.utils.to_categorical(y_test, num_classes)
 
-mixed_precision.set_global_policy('mixed_float16')
-
 gpus = tf.config.list_physical_devices('GPU')
 if gpus:
     try:
@@ -157,7 +155,6 @@ model.compile(
     loss='binary_crossentropy',
     optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
     metrics=['accuracy'],
-    jit_compile=True
 )
 
 # Print model summary
@@ -165,7 +162,7 @@ model.summary()
 
 # Training parameters
 batch_size = 128
-epochs = 20
+epochs = 8
 
 # Add callbacks for better training
 callbacks = [
@@ -197,6 +194,8 @@ history = model.fit(
 score = model.evaluate(x_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
+
+model.save('seizure_detection_model.keras')
 
 # Plot training history
 plt.figure(figsize=(12, 4))
