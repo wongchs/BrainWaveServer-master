@@ -17,36 +17,48 @@ class ESP32BLEManager:
         self.notification_characteristic = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
         self.write_characteristic = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
         self.loop = None
+        self.connection_thread = None
+        self.should_retry = True
 
-    async def connect(self):
-        """Establish BLE connection with ESP32"""
-        try:
-            print(f"Scanning for ESP32 device: {self.esp32_mac}")
-            device = await BleakScanner.find_device_by_address(self.esp32_mac, timeout=20.0)
-            
-            if not device:
-                print("ESP32 device not found")
-                return False
+    async def connect_with_retry(self):
+        """Continuously attempt to connect to ESP32 with retry logic"""
+        while self.should_retry:
+            if not self.connected:
+                try:
+                    print(f"Attempting to connect to ESP32: {self.esp32_mac}")
+                    device = await BleakScanner.find_device_by_address(self.esp32_mac, timeout=20.0)
+                    
+                    if device:
+                        self.client = BleakClient(device)
+                        await self.client.connect()
+                        self.connected = True
+                        print("Successfully connected to ESP32")
+                    else:
+                        print("ESP32 device not found, retrying in 5 seconds...")
+                        await asyncio.sleep(5)
+                        
+                except Exception as e:
+                    print(f"Connection error: {str(e)}, retrying in 5 seconds...")
+                    await asyncio.sleep(5)
+            else:
+                await asyncio.sleep(1)
 
-            print(f"Found ESP32 device, attempting to connect...")
-            self.client = BleakClient(device)
-            await self.client.connect()
-            self.connected = True
-            print("Successfully connected to ESP32")
-            return True
+    
+    def start_connection_thread(self, loop):
+        """Start a background thread for ESP32 connection attempts"""
+        async def run_connection():
+            await self.connect_with_retry()
 
-        except Exception as e:
-            print(f"Connection error: {str(e)}")
-            self.connected = False
-            return False
+        asyncio.run_coroutine_threadsafe(run_connection(), loop)
+
 
     async def send_alert(self, message="SEIZURE_DETECTED\n"):
         """Send alert to ESP32"""
-        try:
-            if not self.connected or not self.client:
-                print("Not connected to ESP32")
-                return False
+        if not self.connected or not self.client:
+            print("Not connected to ESP32 - Alert not sent")
+            return False
 
+        try:
             await self.client.write_gatt_char(
                 self.write_characteristic, 
                 message.encode(),
@@ -54,7 +66,6 @@ class ESP32BLEManager:
             )
             print(f"Alert sent to ESP32: {message.strip()}")
             return True
-
         except Exception as e:
             print(f"Failed to send alert: {str(e)}")
             self.connected = False
@@ -62,10 +73,12 @@ class ESP32BLEManager:
 
     async def disconnect(self):
         """Disconnect from ESP32"""
+        self.should_retry = False
         if self.client and self.connected:
             await self.client.disconnect()
             self.connected = False
             print("Disconnected from ESP32")
+
 
 class AsyncioThread(threading.Thread):
     def __init__(self):
@@ -80,31 +93,11 @@ class AsyncioThread(threading.Thread):
         self.started.set()
         self.loop.run_forever()
 
-def handle_client(client_sock, client_info, board):
+
+def handle_client(client_sock, client_info, board, esp32_manager):
     print(f"Handling connection from {client_info}")
     
-    # Initialize ESP32 manager
-    esp32_mac = "08:B6:1F:B9:36:76"  # Your ESP32's MAC address
-    esp32_manager = ESP32BLEManager(esp32_mac)
-    
-    # Create and start asyncio thread
-    asyncio_thread = AsyncioThread()
-    asyncio_thread.start()
-    
-    # Wait for the event loop to be ready
-    asyncio_thread.started.wait()
-    
-    # Connect to ESP32
     try:
-        future = asyncio.run_coroutine_threadsafe(
-            esp32_manager.connect(), 
-            asyncio_thread.loop
-        )
-        connected = future.result(timeout=30)  # Add timeout to prevent hanging
-        
-        if not connected:
-            print("Warning: Could not establish initial connection to ESP32")
-        
         last_seizure_time = time.time() - 10
         while True:
             data = board.get_current_board_data(10)
@@ -122,12 +115,16 @@ def handle_client(client_sock, client_info, board):
                             "seizure_detected": True,
                             "timestamp": timestamp
                         })
-                        # Send alert to ESP32
-                        future = asyncio.run_coroutine_threadsafe(
-                            esp32_manager.send_alert(),
-                            asyncio_thread.loop
-                        )
-                        future.result(timeout=5)  # Add timeout for alert sending
+                        # Try to send alert to ESP32 if connected
+                        if esp32_manager.connected:
+                            future = asyncio.run_coroutine_threadsafe(
+                                esp32_manager.send_alert(),
+                                esp32_manager.loop
+                            )
+                            try:
+                                future.result(timeout=5)
+                            except Exception as e:
+                                print(f"Failed to send alert: {str(e)}")
                     else:
                         json_data = json.dumps({"data": data_list})
                 else:
@@ -142,18 +139,6 @@ def handle_client(client_sock, client_info, board):
         print(f"Error in handle_client: {str(e)}")
     finally:
         client_sock.close()
-        # Disconnect from ESP32
-        try:
-            future = asyncio.run_coroutine_threadsafe(
-                esp32_manager.disconnect(),
-                asyncio_thread.loop
-            )
-            future.result(timeout=5)
-        except Exception as e:
-            print(f"Error during disconnect: {str(e)}")
-            
-        # Stop asyncio loop
-        asyncio_thread.loop.call_soon_threadsafe(asyncio_thread.loop.stop)
         print(f"Connection closed with {client_info}")
 
 
@@ -174,18 +159,32 @@ async def scan_ble_devices():
 
 # device as the main bluetooth server, accept connection from android clients
 def start_bluetooth_server(board):
+    # Initialize ESP32 manager
+    esp32_mac = "08:B6:1F:B9:36:76"  # Your ESP32's MAC address
+    
+    # Create and start asyncio thread
+    asyncio_thread = AsyncioThread()
+    asyncio_thread.start()
+    asyncio_thread.started.wait()
+    
+    # Initialize ESP32 manager with the asyncio loop
+    esp32_manager = ESP32BLEManager(esp32_mac)
+    esp32_manager.loop = asyncio_thread.loop
+    
+    # Start ESP32 connection attempts in background
+    esp32_manager.start_connection_thread(asyncio_thread.loop)
+
     server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
     port = bluetooth.PORT_ANY
-    server_sock.bind(("", port))  # Bind to all available Bluetooth adapters
-    server_sock.listen(5)  # Allow up to 5 simultaneous connections
+    server_sock.bind(("", port))
+    server_sock.listen(5)
 
     uuid = "00001101-0000-1000-8000-00805F9B34FB"
     bluetooth.advertise_service(server_sock, "BrainWaveServer",
-                                service_id=uuid,
-                                service_classes=[uuid, bluetooth.SERIAL_PORT_CLASS],
-                                profiles=[bluetooth.SERIAL_PORT_PROFILE])
+                              service_id=uuid,
+                              service_classes=[uuid, bluetooth.SERIAL_PORT_CLASS],
+                              profiles=[bluetooth.SERIAL_PORT_PROFILE])
 
-    # Get and print the Bluetooth adapter's address for user reference
     local_address = bluetooth.read_local_bdaddr()
     print(f"Server started on Bluetooth address: {local_address}")
     print(f"Waiting for connections on RFCOMM channel {server_sock.getsockname()[1]}")
@@ -194,11 +193,25 @@ def start_bluetooth_server(board):
         while True:
             client_sock, client_info = server_sock.accept()
             print(f"Accepted connection from {client_info}")
-            client_thread = threading.Thread(target=handle_client, args=(client_sock, client_info, board))
+            client_thread = threading.Thread(
+                target=handle_client, 
+                args=(client_sock, client_info, board, esp32_manager)
+            )
             client_thread.start()
     except KeyboardInterrupt:
         print("Server stopped by user")
     finally:
+        # Clean up ESP32 connection
+        future = asyncio.run_coroutine_threadsafe(
+            esp32_manager.disconnect(),
+            asyncio_thread.loop
+        )
+        try:
+            future.result(timeout=5)
+        except Exception as e:
+            print(f"Error during ESP32 disconnect: {str(e)}")
+            
+        # Stop asyncio loop
+        asyncio_thread.loop.call_soon_threadsafe(asyncio_thread.loop.stop)
         server_sock.close()
         print("Server stopped")
-
