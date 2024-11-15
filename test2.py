@@ -1,4 +1,3 @@
-import asyncio
 import json
 import time
 from datetime import datetime
@@ -7,8 +6,6 @@ import numpy as np
 import tensorflow as tf
 from scipy.signal import spectrogram
 import os
-import bluetooth
-import threading
 
 class SeizureDetector:
     def __init__(self, model_path='seizure_detection_model.keras'):
@@ -109,19 +106,20 @@ class SeizureDetector:
         except Exception as e:
             print(f"Error in predict: {str(e)}")
             raise
-
+        
+        
 class EEGDataReader:
     def __init__(self, patient_num, segment_type='preictal', segment_num=1):
-        self.base_path = f'./kaggle/input/seizure-prediction/Patient_{patient_num}/Patient_{patient_num}/'
-        self.file_path = os.path.join(
-            self.base_path, 
-            f'Patient_{patient_num}_{segment_type}_segment_{str(segment_num).zfill(4)}.mat'
-        )
-        # self.base_path = f'./kaggle/input/seizure-prediction/Dog_{patient_num}/Dog_{patient_num}/'
+        # self.base_path = f'./kaggle/input/seizure-prediction/Patient_{patient_num}/Patient_{patient_num}/'
         # self.file_path = os.path.join(
         #     self.base_path, 
-        #     f'Dog_{patient_num}_{segment_type}_segment_{str(segment_num).zfill(4)}.mat'
+        #     f'Patient_{patient_num}_{segment_type}_segment_{str(segment_num).zfill(4)}.mat'
         # )
+        self.base_path = f'./kaggle/input/seizure-prediction/Dog_{patient_num}/Dog_{patient_num}/'
+        self.file_path = os.path.join(
+            self.base_path, 
+            f'Dog_{patient_num}_{segment_type}_segment_{str(segment_num).zfill(4)}.mat'
+        )
         self.current_position = 0
         self.load_data()
         
@@ -130,7 +128,7 @@ class EEGDataReader:
         try:
             print(f"Loading EEG data from {self.file_path}")
             mat_data = scipy.io.loadmat(self.file_path)
-            key = list(mat_data.keys())[-1]  # Get the last key containing data
+            key = list(mat_data.keys())[-1]
             self.data = mat_data[key][0][0][0]
             print(f"EEG data loaded successfully. Shape: {self.data.shape}")
             
@@ -157,117 +155,86 @@ class EEGDataReader:
             print(f"Error getting chunk: {str(e)}")
             raise
 
-class SeizureAlertServer:
+class SeizureMonitor:
     def __init__(self, detector, data_reader):
         self.detector = detector
         self.data_reader = data_reader
         self.alert_history = []
+        self.consecutive_detections = 0
+        self.min_consecutive_detections = 3
         
-    def handle_client(self, client_sock, client_info):
-        """Handle individual client connection with real-time seizure detection"""
-        print(f"Handling connection from {client_info}")
-        consecutive_detections = 0
-        min_consecutive_detections = 3  # Number of consecutive detections needed for alert
-        
+    def log_alert(self, alert_data):
+        """Log alert data to a file"""
         try:
-            while True:
-                # Get 1 second of EEG data (5000 samples at 5000 Hz)
-                data_chunk = self.data_reader.get_chunk()
-                
-                # Get seizure probability from model
-                seizure_prob = self.detector.predict(data_chunk)
-                
-                # Update consecutive detections
-                if seizure_prob > self.detector.threshold:
-                    consecutive_detections += 1
-                else:
-                    consecutive_detections = 0
-                
-                # Determine if this is a true detection
-                true_detection = consecutive_detections >= min_consecutive_detections
-                
-                # Prepare data for sending
-                alert_data = {
-                    "data": data_chunk[:10].tolist(),  # Send first 10 samples as preview
-                    "seizure_probability": float(seizure_prob),
-                    "seizure_detected": true_detection,
-                    "consecutive_detections": consecutive_detections,
-                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                }
-                
-                # Log alert
-                self.alert_history.append(alert_data)
-                
-                # Convert to JSON and send
-                json_data = json.dumps(alert_data)
-                client_sock.send(json_data.encode())
-                
-                # Print status
-                print(f"\rCurrent seizure probability: {seizure_prob:.3f} "
-                      f"(Consecutive detections: {consecutive_detections})", end="")
-                
-                # If true detection, print warning
-                if true_detection:
-                    print(f"\n⚠️ SEIZURE ALERT! Probability: {seizure_prob:.3f}")
-                    print(f"Timestamp: {alert_data['timestamp']}")
-                    print("Data preview:", alert_data["data"])
-                    print("-" * 50)
-                
-                # Small delay to prevent overwhelming the connection
-                time.sleep(0.1)
-                
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"seizure_alerts_{timestamp[:8]}.json"
+            
+            self.alert_history.append(alert_data)
+            
+            with open(filename, 'w') as f:
+                json.dump(self.alert_history, f, indent=2)
         except Exception as e:
-            print(f"\nError handling client {client_info}: {str(e)}")
-        finally:
-            client_sock.close()
-            print(f"\nConnection closed with {client_info}")
-    
-    def start(self):
-        """Start the Bluetooth server"""
-        server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-        port = bluetooth.PORT_ANY
-        server_sock.bind(("", port))
-        server_sock.listen(5)
-
-        # Set up Bluetooth service
-        uuid = "00001101-0000-1000-8000-00805F9B34FB"
-        bluetooth.advertise_service(
-            server_sock, 
-            "SeizureAlertServer",
-            service_id=uuid,
-            service_classes=[uuid, bluetooth.SERIAL_PORT_CLASS],
-            profiles=[bluetooth.SERIAL_PORT_PROFILE]
-        )
-
-        local_address = bluetooth.read_local_bdaddr()
-        print(f"Server started on Bluetooth address: {local_address}")
-        print(f"Waiting for connections on RFCOMM channel {server_sock.getsockname()[1]}")
-
+            print(f"Error logging alert: {str(e)}")
+            
+    def start_monitoring(self):
+        """Start continuous seizure monitoring"""
+        print("Starting seizure monitoring...")
+        print(f"Using threshold: {self.detector.threshold}")
+        print("Press Ctrl+C to stop monitoring")
+        
         try:
             while True:
-                client_sock, client_info = server_sock.accept()
-                print(f"Accepted connection from {client_info}")
-                # Handle each client in a separate thread
-                client_thread = threading.Thread(
-                    target=self.handle_client,
-                    args=(client_sock, client_info)
-                )
-                client_thread.start()
+                try:
+                    data_chunk = self.data_reader.get_chunk()
+                    seizure_prob = self.detector.predict(data_chunk)
+                    
+                    is_seizure = seizure_prob > self.detector.threshold
+                    
+                    if is_seizure:
+                        self.consecutive_detections += 1
+                    else:
+                        self.consecutive_detections = 0
+                    
+                    true_detection = self.consecutive_detections >= self.min_consecutive_detections
+                    
+                    alert_data = {
+                        "data_preview": data_chunk[:10].tolist(),
+                        "seizure_probability": float(seizure_prob),  # Ensure JSON serializable
+                        "seizure_detected": true_detection,
+                        "consecutive_detections": self.consecutive_detections,
+                        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    }
+                    
+                    self.log_alert(alert_data)
+                    
+                    print(f"\rCurrent seizure probability: {seizure_prob:.3f} "
+                          f"(Consecutive detections: {self.consecutive_detections})", end="")
+                    
+                    if true_detection:
+                        print(f"\n⚠️ SEIZURE ALERT! Probability: {seizure_prob:.3f}")
+                        print(f"Timestamp: {alert_data['timestamp']}")
+                        print("Data preview:", alert_data["data_preview"])
+                        print("-" * 50)
+                    
+                    time.sleep(0.1)
+                    
+                except Exception as e:
+                    print(f"\nError in monitoring loop: {str(e)}")
+                    print("Continuing to next iteration...")
+                    time.sleep(1)  # Add delay before retry
+                    
         except KeyboardInterrupt:
-            print("\nServer stopped by user")
+            print("\nMonitoring stopped by user")
         finally:
-            server_sock.close()
-            print("Server stopped")
+            print("\nMonitoring ended")
+            print(f"Total alerts logged: {len(self.alert_history)}")
 
 def main():
     try:
-        # Initialize components
         detector = SeizureDetector('seizure_detection_model.keras')
-        data_reader = EEGDataReader(patient_num=1)  # Using Patient 1's data
-        server = SeizureAlertServer(detector, data_reader)
-        
-        # Start server
-        server.start()
+        data_reader = EEGDataReader(patient_num=5)
+        monitor = SeizureMonitor(detector, data_reader)
+        monitor.start_monitoring()
     except Exception as e:
         print(f"Fatal error in main: {str(e)}")
 

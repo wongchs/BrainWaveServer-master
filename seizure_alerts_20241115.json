@@ -1,0 +1,2738 @@
+[
+  {
+    "data_preview": [
+      -34,
+      -38,
+      -31,
+      -28,
+      -29,
+      -27,
+      -27,
+      -34,
+      -37,
+      -41
+    ],
+    "seizure_probability": 0.7838383913040161,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:21"
+  },
+  {
+    "data_preview": [
+      30,
+      24,
+      19,
+      11,
+      3,
+      1,
+      -4,
+      1,
+      7,
+      10
+    ],
+    "seizure_probability": 0.8896152675151825,
+    "seizure_detected": false,
+    "consecutive_detections": 1,
+    "timestamp": "2024-11-15 18:46:21"
+  },
+  {
+    "data_preview": [
+      26,
+      28,
+      36,
+      46,
+      48,
+      49,
+      64,
+      70,
+      86,
+      91
+    ],
+    "seizure_probability": 0.911003053188324,
+    "seizure_detected": false,
+    "consecutive_detections": 2,
+    "timestamp": "2024-11-15 18:46:21"
+  },
+  {
+    "data_preview": [
+      2,
+      2,
+      5,
+      2,
+      -2,
+      -1,
+      -9,
+      -18,
+      -17,
+      -11
+    ],
+    "seizure_probability": 0.8552905470132828,
+    "seizure_detected": true,
+    "consecutive_detections": 3,
+    "timestamp": "2024-11-15 18:46:21"
+  },
+  {
+    "data_preview": [
+      -34,
+      -25,
+      -14,
+      -10,
+      -4,
+      4,
+      9,
+      12,
+      9,
+      9
+    ],
+    "seizure_probability": 0.6864964360371232,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:22"
+  },
+  {
+    "data_preview": [
+      -21,
+      -27,
+      -37,
+      -36,
+      -27,
+      -18,
+      -19,
+      -13,
+      -8,
+      -2
+    ],
+    "seizure_probability": 0.5722401085755943,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:22"
+  },
+  {
+    "data_preview": [
+      6,
+      -4,
+      -10,
+      -13,
+      -24,
+      -29,
+      -24,
+      -22,
+      -18,
+      -21
+    ],
+    "seizure_probability": 0.4909823295311071,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:22"
+  },
+  {
+    "data_preview": [
+      -84,
+      -72,
+      -65,
+      -67,
+      -65,
+      -62,
+      -67,
+      -79,
+      -86,
+      -89
+    ],
+    "seizure_probability": 0.4308440819659154,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:22"
+  },
+  {
+    "data_preview": [
+      12,
+      15,
+      14,
+      14,
+      14,
+      5,
+      4,
+      13,
+      17,
+      16
+    ],
+    "seizure_probability": 0.43908156158997574,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:22"
+  },
+  {
+    "data_preview": [
+      23,
+      28,
+      23,
+      24,
+      26,
+      20,
+      15,
+      8,
+      0,
+      -11
+    ],
+    "seizure_probability": 0.3960474338789936,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:22"
+  },
+  {
+    "data_preview": [
+      -10,
+      -3,
+      7,
+      11,
+      12,
+      3,
+      -5,
+      -14,
+      -21,
+      -21
+    ],
+    "seizure_probability": 0.3176767169323284,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:22"
+  },
+  {
+    "data_preview": [
+      18,
+      6,
+      2,
+      0,
+      -5,
+      -7,
+      4,
+      6,
+      2,
+      -2
+    ],
+    "seizure_probability": 0.21816043544677086,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:23"
+  },
+  {
+    "data_preview": [
+      9,
+      2,
+      -6,
+      -9,
+      -7,
+      -6,
+      -12,
+      -14,
+      -17,
+      -13
+    ],
+    "seizure_probability": 0.12280511662538629,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:23"
+  },
+  {
+    "data_preview": [
+      -2,
+      -20,
+      -25,
+      -24,
+      -30,
+      -41,
+      -46,
+      -34,
+      -27,
+      -7
+    ],
+    "seizure_probability": 0.054558111561345865,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:23"
+  },
+  {
+    "data_preview": [
+      -46,
+      -51,
+      -46,
+      -31,
+      -14,
+      -2,
+      0,
+      -12,
+      -16,
+      -24
+    ],
+    "seizure_probability": 0.05350101819203701,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:23"
+  },
+  {
+    "data_preview": [
+      -13,
+      -9,
+      -2,
+      7,
+      16,
+      24,
+      28,
+      37,
+      41,
+      45
+    ],
+    "seizure_probability": 0.05346029238135088,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:23"
+  },
+  {
+    "data_preview": [
+      -38,
+      -36,
+      -32,
+      -37,
+      -37,
+      -26,
+      -23,
+      -15,
+      0,
+      5
+    ],
+    "seizure_probability": 0.05353864047501702,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:23"
+  },
+  {
+    "data_preview": [
+      13,
+      6,
+      0,
+      -10,
+      -16,
+      -18,
+      -15,
+      -11,
+      -7,
+      -5
+    ],
+    "seizure_probability": 0.05265045611013193,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:23"
+  },
+  {
+    "data_preview": [
+      -50,
+      -49,
+      -49,
+      -36,
+      -24,
+      -21,
+      -25,
+      -26,
+      -29,
+      -35
+    ],
+    "seizure_probability": 0.0025494543631793933,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:24"
+  },
+  {
+    "data_preview": [
+      3,
+      -3,
+      2,
+      4,
+      2,
+      -4,
+      -12,
+      -14,
+      -7,
+      -2
+    ],
+    "seizure_probability": 0.001921884369221516,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:24"
+  },
+  {
+    "data_preview": [
+      -2,
+      6,
+      7,
+      2,
+      0,
+      4,
+      -1,
+      -12,
+      -22,
+      -33
+    ],
+    "seizure_probability": 0.0019311270516482182,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:24"
+  },
+  {
+    "data_preview": [
+      6,
+      12,
+      13,
+      10,
+      0,
+      -10,
+      -17,
+      -17,
+      -10,
+      0
+    ],
+    "seizure_probability": 0.0019209467369364574,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:24"
+  },
+  {
+    "data_preview": [
+      36,
+      36,
+      37,
+      35,
+      26,
+      27,
+      23,
+      19,
+      15,
+      8
+    ],
+    "seizure_probability": 0.0019096049276413397,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:24"
+  },
+  {
+    "data_preview": [
+      -31,
+      -27,
+      -19,
+      -15,
+      -15,
+      -19,
+      -17,
+      -17,
+      -22,
+      -17
+    ],
+    "seizure_probability": 0.0013555931320297532,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:24"
+  },
+  {
+    "data_preview": [
+      -32,
+      -33,
+      -32,
+      -27,
+      -14,
+      3,
+      9,
+      -4,
+      -6,
+      -2
+    ],
+    "seizure_probability": 0.0012944590795086696,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:24"
+  },
+  {
+    "data_preview": [
+      4,
+      5,
+      8,
+      13,
+      16,
+      11,
+      3,
+      -10,
+      -18,
+      -27
+    ],
+    "seizure_probability": 0.0012662344670388848,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:25"
+  },
+  {
+    "data_preview": [
+      32,
+      26,
+      20,
+      15,
+      12,
+      11,
+      20,
+      32,
+      36,
+      28
+    ],
+    "seizure_probability": 0.0008599898617831058,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:25"
+  },
+  {
+    "data_preview": [
+      14,
+      23,
+      37,
+      52,
+      62,
+      72,
+      78,
+      69,
+      60,
+      58
+    ],
+    "seizure_probability": 0.0007731994177447632,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:25"
+  },
+  {
+    "data_preview": [
+      -12,
+      -7,
+      -1,
+      3,
+      3,
+      5,
+      5,
+      11,
+      16,
+      20
+    ],
+    "seizure_probability": 0.000389618385815993,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:25"
+  },
+  {
+    "data_preview": [
+      -12,
+      -4,
+      3,
+      -2,
+      -13,
+      -18,
+      -19,
+      -15,
+      -7,
+      -1
+    ],
+    "seizure_probability": 0.00019523282535374164,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:25"
+  },
+  {
+    "data_preview": [
+      -1,
+      -4,
+      -11,
+      -16,
+      -27,
+      -31,
+      -25,
+      -21,
+      -16,
+      -23
+    ],
+    "seizure_probability": 0.00019652564224088566,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:25"
+  },
+  {
+    "data_preview": [
+      10,
+      9,
+      10,
+      9,
+      19,
+      24,
+      24,
+      16,
+      11,
+      5
+    ],
+    "seizure_probability": 0.00019927537214243786,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:25"
+  },
+  {
+    "data_preview": [
+      -2,
+      -5,
+      -8,
+      -12,
+      -22,
+      -28,
+      -27,
+      -22,
+      -23,
+      -26
+    ],
+    "seizure_probability": 0.0002896753358072601,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:26"
+  },
+  {
+    "data_preview": [
+      13,
+      14,
+      28,
+      39,
+      39,
+      37,
+      28,
+      20,
+      9,
+      5
+    ],
+    "seizure_probability": 0.0013886547269066796,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:26"
+  },
+  {
+    "data_preview": [
+      -21,
+      -13,
+      -5,
+      0,
+      0,
+      -7,
+      -8,
+      -6,
+      -7,
+      0
+    ],
+    "seizure_probability": 0.0016287464284687303,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:26"
+  },
+  {
+    "data_preview": [
+      -35,
+      -44,
+      -48,
+      -50,
+      -46,
+      -30,
+      -15,
+      -4,
+      1,
+      4
+    ],
+    "seizure_probability": 0.0016817308627651074,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:26"
+  },
+  {
+    "data_preview": [
+      47,
+      45,
+      39,
+      27,
+      23,
+      19,
+      18,
+      13,
+      11,
+      17
+    ],
+    "seizure_probability": 0.0016884208511328326,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:26"
+  },
+  {
+    "data_preview": [
+      10,
+      13,
+      17,
+      10,
+      5,
+      6,
+      7,
+      12,
+      13,
+      9
+    ],
+    "seizure_probability": 0.001696824909595307,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:26"
+  },
+  {
+    "data_preview": [
+      -22,
+      -30,
+      -31,
+      -30,
+      -27,
+      -32,
+      -28,
+      -16,
+      -6,
+      2
+    ],
+    "seizure_probability": 0.0020347197729279286,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:26"
+  },
+  {
+    "data_preview": [
+      -62,
+      -59,
+      -43,
+      -38,
+      -30,
+      -20,
+      -13,
+      -10,
+      -8,
+      -3
+    ],
+    "seizure_probability": 0.0019978831987828016,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:26"
+  },
+  {
+    "data_preview": [
+      -37,
+      -35,
+      -28,
+      -25,
+      -16,
+      -7,
+      -5,
+      0,
+      -4,
+      -8
+    ],
+    "seizure_probability": 0.001990317970921751,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:27"
+  },
+  {
+    "data_preview": [
+      -21,
+      -21,
+      -12,
+      -21,
+      -39,
+      -39,
+      -37,
+      -35,
+      -39,
+      -48
+    ],
+    "seizure_probability": 0.00199572880519554,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:27"
+  },
+  {
+    "data_preview": [
+      -46,
+      -55,
+      -61,
+      -61,
+      -61,
+      -59,
+      -58,
+      -55,
+      -42,
+      -29
+    ],
+    "seizure_probability": 0.0019083039311226456,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:27"
+  },
+  {
+    "data_preview": [
+      -34,
+      -21,
+      -23,
+      -25,
+      -23,
+      -19,
+      -16,
+      -9,
+      -4,
+      0
+    ],
+    "seizure_probability": 0.0008165625724359416,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:27"
+  },
+  {
+    "data_preview": [
+      -28,
+      -21,
+      -11,
+      -8,
+      -7,
+      -19,
+      -35,
+      -45,
+      -42,
+      -41
+    ],
+    "seizure_probability": 0.0005821939746965654,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:27"
+  },
+  {
+    "data_preview": [
+      -30,
+      -24,
+      -11,
+      1,
+      5,
+      5,
+      -1,
+      -11,
+      -12,
+      -3
+    ],
+    "seizure_probability": 0.0005212343938183039,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:27"
+  },
+  {
+    "data_preview": [
+      5,
+      17,
+      12,
+      10,
+      6,
+      6,
+      12,
+      14,
+      9,
+      2
+    ],
+    "seizure_probability": 0.0005196270605665632,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:27"
+  },
+  {
+    "data_preview": [
+      -34,
+      -38,
+      -31,
+      -28,
+      -29,
+      -27,
+      -27,
+      -34,
+      -37,
+      -41
+    ],
+    "seizure_probability": 0.07888240204047178,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:28"
+  },
+  {
+    "data_preview": [
+      30,
+      24,
+      19,
+      11,
+      3,
+      1,
+      -4,
+      1,
+      7,
+      10
+    ],
+    "seizure_probability": 0.17807016447040952,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:28"
+  },
+  {
+    "data_preview": [
+      26,
+      28,
+      36,
+      46,
+      48,
+      49,
+      64,
+      70,
+      86,
+      91
+    ],
+    "seizure_probability": 0.27343279060442,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:28"
+  },
+  {
+    "data_preview": [
+      2,
+      2,
+      5,
+      2,
+      -2,
+      -1,
+      -9,
+      -18,
+      -17,
+      -11
+    ],
+    "seizure_probability": 0.34223200099804674,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:28"
+  },
+  {
+    "data_preview": [
+      -34,
+      -25,
+      -14,
+      -10,
+      -4,
+      4,
+      9,
+      12,
+      9,
+      9
+    ],
+    "seizure_probability": 0.3433430870747543,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:28"
+  },
+  {
+    "data_preview": [
+      -21,
+      -27,
+      -37,
+      -36,
+      -27,
+      -18,
+      -19,
+      -13,
+      -8,
+      -2
+    ],
+    "seizure_probability": 0.3434247572891763,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:28"
+  },
+  {
+    "data_preview": [
+      6,
+      -4,
+      -10,
+      -13,
+      -24,
+      -29,
+      -24,
+      -22,
+      -18,
+      -21
+    ],
+    "seizure_probability": 0.3437467987940181,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:28"
+  },
+  {
+    "data_preview": [
+      -84,
+      -72,
+      -65,
+      -67,
+      -65,
+      -62,
+      -67,
+      -79,
+      -86,
+      -89
+    ],
+    "seizure_probability": 0.34471493879973425,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:29"
+  },
+  {
+    "data_preview": [
+      12,
+      15,
+      14,
+      14,
+      14,
+      5,
+      4,
+      13,
+      17,
+      16
+    ],
+    "seizure_probability": 0.39519415710092287,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:29"
+  },
+  {
+    "data_preview": [
+      23,
+      28,
+      23,
+      24,
+      26,
+      20,
+      15,
+      8,
+      0,
+      -11
+    ],
+    "seizure_probability": 0.3960474338789936,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:29"
+  },
+  {
+    "data_preview": [
+      -10,
+      -3,
+      7,
+      11,
+      12,
+      3,
+      -5,
+      -14,
+      -21,
+      -21
+    ],
+    "seizure_probability": 0.3176767169323284,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:29"
+  },
+  {
+    "data_preview": [
+      18,
+      6,
+      2,
+      0,
+      -5,
+      -7,
+      4,
+      6,
+      2,
+      -2
+    ],
+    "seizure_probability": 0.21816043544677086,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:29"
+  },
+  {
+    "data_preview": [
+      9,
+      2,
+      -6,
+      -9,
+      -7,
+      -6,
+      -12,
+      -14,
+      -17,
+      -13
+    ],
+    "seizure_probability": 0.12280511662538629,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:29"
+  },
+  {
+    "data_preview": [
+      -2,
+      -20,
+      -25,
+      -24,
+      -30,
+      -41,
+      -46,
+      -34,
+      -27,
+      -7
+    ],
+    "seizure_probability": 0.054558111561345865,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:29"
+  },
+  {
+    "data_preview": [
+      -46,
+      -51,
+      -46,
+      -31,
+      -14,
+      -2,
+      0,
+      -12,
+      -16,
+      -24
+    ],
+    "seizure_probability": 0.05350101819203701,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:30"
+  },
+  {
+    "data_preview": [
+      -13,
+      -9,
+      -2,
+      7,
+      16,
+      24,
+      28,
+      37,
+      41,
+      45
+    ],
+    "seizure_probability": 0.05346029238135088,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:30"
+  },
+  {
+    "data_preview": [
+      -38,
+      -36,
+      -32,
+      -37,
+      -37,
+      -26,
+      -23,
+      -15,
+      0,
+      5
+    ],
+    "seizure_probability": 0.05353864047501702,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:30"
+  },
+  {
+    "data_preview": [
+      13,
+      6,
+      0,
+      -10,
+      -16,
+      -18,
+      -15,
+      -11,
+      -7,
+      -5
+    ],
+    "seizure_probability": 0.05265045611013193,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:30"
+  },
+  {
+    "data_preview": [
+      -50,
+      -49,
+      -49,
+      -36,
+      -24,
+      -21,
+      -25,
+      -26,
+      -29,
+      -35
+    ],
+    "seizure_probability": 0.0025494543631793933,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:30"
+  },
+  {
+    "data_preview": [
+      3,
+      -3,
+      2,
+      4,
+      2,
+      -4,
+      -12,
+      -14,
+      -7,
+      -2
+    ],
+    "seizure_probability": 0.001921884369221516,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:30"
+  },
+  {
+    "data_preview": [
+      -2,
+      6,
+      7,
+      2,
+      0,
+      4,
+      -1,
+      -12,
+      -22,
+      -33
+    ],
+    "seizure_probability": 0.0019311270516482182,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:30"
+  },
+  {
+    "data_preview": [
+      6,
+      12,
+      13,
+      10,
+      0,
+      -10,
+      -17,
+      -17,
+      -10,
+      0
+    ],
+    "seizure_probability": 0.0019209467369364574,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:31"
+  },
+  {
+    "data_preview": [
+      36,
+      36,
+      37,
+      35,
+      26,
+      27,
+      23,
+      19,
+      15,
+      8
+    ],
+    "seizure_probability": 0.0019096049276413397,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:31"
+  },
+  {
+    "data_preview": [
+      -31,
+      -27,
+      -19,
+      -15,
+      -15,
+      -19,
+      -17,
+      -17,
+      -22,
+      -17
+    ],
+    "seizure_probability": 0.0013555931320297532,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:31"
+  },
+  {
+    "data_preview": [
+      -32,
+      -33,
+      -32,
+      -27,
+      -14,
+      3,
+      9,
+      -4,
+      -6,
+      -2
+    ],
+    "seizure_probability": 0.0012944590795086696,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:31"
+  },
+  {
+    "data_preview": [
+      4,
+      5,
+      8,
+      13,
+      16,
+      11,
+      3,
+      -10,
+      -18,
+      -27
+    ],
+    "seizure_probability": 0.0012662344670388848,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:31"
+  },
+  {
+    "data_preview": [
+      32,
+      26,
+      20,
+      15,
+      12,
+      11,
+      20,
+      32,
+      36,
+      28
+    ],
+    "seizure_probability": 0.0008599898617831058,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:31"
+  },
+  {
+    "data_preview": [
+      14,
+      23,
+      37,
+      52,
+      62,
+      72,
+      78,
+      69,
+      60,
+      58
+    ],
+    "seizure_probability": 0.0007731994177447632,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:31"
+  },
+  {
+    "data_preview": [
+      -12,
+      -7,
+      -1,
+      3,
+      3,
+      5,
+      5,
+      11,
+      16,
+      20
+    ],
+    "seizure_probability": 0.000389618385815993,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:32"
+  },
+  {
+    "data_preview": [
+      -12,
+      -4,
+      3,
+      -2,
+      -13,
+      -18,
+      -19,
+      -15,
+      -7,
+      -1
+    ],
+    "seizure_probability": 0.00019523282535374164,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:32"
+  },
+  {
+    "data_preview": [
+      -1,
+      -4,
+      -11,
+      -16,
+      -27,
+      -31,
+      -25,
+      -21,
+      -16,
+      -23
+    ],
+    "seizure_probability": 0.00019652564224088566,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:32"
+  },
+  {
+    "data_preview": [
+      10,
+      9,
+      10,
+      9,
+      19,
+      24,
+      24,
+      16,
+      11,
+      5
+    ],
+    "seizure_probability": 0.00019927537214243786,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:32"
+  },
+  {
+    "data_preview": [
+      -2,
+      -5,
+      -8,
+      -12,
+      -22,
+      -28,
+      -27,
+      -22,
+      -23,
+      -26
+    ],
+    "seizure_probability": 0.0002896753358072601,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:32"
+  },
+  {
+    "data_preview": [
+      13,
+      14,
+      28,
+      39,
+      39,
+      37,
+      28,
+      20,
+      9,
+      5
+    ],
+    "seizure_probability": 0.0013886547269066796,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:32"
+  },
+  {
+    "data_preview": [
+      -21,
+      -13,
+      -5,
+      0,
+      0,
+      -7,
+      -8,
+      -6,
+      -7,
+      0
+    ],
+    "seizure_probability": 0.0016287464284687303,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:32"
+  },
+  {
+    "data_preview": [
+      -35,
+      -44,
+      -48,
+      -50,
+      -46,
+      -30,
+      -15,
+      -4,
+      1,
+      4
+    ],
+    "seizure_probability": 0.0016817308627651074,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:33"
+  },
+  {
+    "data_preview": [
+      47,
+      45,
+      39,
+      27,
+      23,
+      19,
+      18,
+      13,
+      11,
+      17
+    ],
+    "seizure_probability": 0.0016884208511328326,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:33"
+  },
+  {
+    "data_preview": [
+      10,
+      13,
+      17,
+      10,
+      5,
+      6,
+      7,
+      12,
+      13,
+      9
+    ],
+    "seizure_probability": 0.001696824909595307,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:33"
+  },
+  {
+    "data_preview": [
+      -22,
+      -30,
+      -31,
+      -30,
+      -27,
+      -32,
+      -28,
+      -16,
+      -6,
+      2
+    ],
+    "seizure_probability": 0.0020347197729279286,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:33"
+  },
+  {
+    "data_preview": [
+      -62,
+      -59,
+      -43,
+      -38,
+      -30,
+      -20,
+      -13,
+      -10,
+      -8,
+      -3
+    ],
+    "seizure_probability": 0.0019978831987828016,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:33"
+  },
+  {
+    "data_preview": [
+      -37,
+      -35,
+      -28,
+      -25,
+      -16,
+      -7,
+      -5,
+      0,
+      -4,
+      -8
+    ],
+    "seizure_probability": 0.001990317970921751,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:33"
+  },
+  {
+    "data_preview": [
+      -21,
+      -21,
+      -12,
+      -21,
+      -39,
+      -39,
+      -37,
+      -35,
+      -39,
+      -48
+    ],
+    "seizure_probability": 0.00199572880519554,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:33"
+  },
+  {
+    "data_preview": [
+      -46,
+      -55,
+      -61,
+      -61,
+      -61,
+      -59,
+      -58,
+      -55,
+      -42,
+      -29
+    ],
+    "seizure_probability": 0.0019083039311226456,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:34"
+  },
+  {
+    "data_preview": [
+      -34,
+      -21,
+      -23,
+      -25,
+      -23,
+      -19,
+      -16,
+      -9,
+      -4,
+      0
+    ],
+    "seizure_probability": 0.0008165625724359416,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:34"
+  },
+  {
+    "data_preview": [
+      -28,
+      -21,
+      -11,
+      -8,
+      -7,
+      -19,
+      -35,
+      -45,
+      -42,
+      -41
+    ],
+    "seizure_probability": 0.0005821939746965654,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:34"
+  },
+  {
+    "data_preview": [
+      -30,
+      -24,
+      -11,
+      1,
+      5,
+      5,
+      -1,
+      -11,
+      -12,
+      -3
+    ],
+    "seizure_probability": 0.0005212343938183039,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:34"
+  },
+  {
+    "data_preview": [
+      5,
+      17,
+      12,
+      10,
+      6,
+      6,
+      12,
+      14,
+      9,
+      2
+    ],
+    "seizure_probability": 0.0005196270605665632,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:34"
+  },
+  {
+    "data_preview": [
+      -34,
+      -38,
+      -31,
+      -28,
+      -29,
+      -27,
+      -27,
+      -34,
+      -37,
+      -41
+    ],
+    "seizure_probability": 0.07888240204047178,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:34"
+  },
+  {
+    "data_preview": [
+      30,
+      24,
+      19,
+      11,
+      3,
+      1,
+      -4,
+      1,
+      7,
+      10
+    ],
+    "seizure_probability": 0.17807016447040952,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:34"
+  },
+  {
+    "data_preview": [
+      26,
+      28,
+      36,
+      46,
+      48,
+      49,
+      64,
+      70,
+      86,
+      91
+    ],
+    "seizure_probability": 0.27343279060442,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:35"
+  },
+  {
+    "data_preview": [
+      2,
+      2,
+      5,
+      2,
+      -2,
+      -1,
+      -9,
+      -18,
+      -17,
+      -11
+    ],
+    "seizure_probability": 0.34223200099804674,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:35"
+  },
+  {
+    "data_preview": [
+      -34,
+      -25,
+      -14,
+      -10,
+      -4,
+      4,
+      9,
+      12,
+      9,
+      9
+    ],
+    "seizure_probability": 0.3433430870747543,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:35"
+  },
+  {
+    "data_preview": [
+      -21,
+      -27,
+      -37,
+      -36,
+      -27,
+      -18,
+      -19,
+      -13,
+      -8,
+      -2
+    ],
+    "seizure_probability": 0.3434247572891763,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:35"
+  },
+  {
+    "data_preview": [
+      6,
+      -4,
+      -10,
+      -13,
+      -24,
+      -29,
+      -24,
+      -22,
+      -18,
+      -21
+    ],
+    "seizure_probability": 0.3437467987940181,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:35"
+  },
+  {
+    "data_preview": [
+      -84,
+      -72,
+      -65,
+      -67,
+      -65,
+      -62,
+      -67,
+      -79,
+      -86,
+      -89
+    ],
+    "seizure_probability": 0.34471493879973425,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:35"
+  },
+  {
+    "data_preview": [
+      12,
+      15,
+      14,
+      14,
+      14,
+      5,
+      4,
+      13,
+      17,
+      16
+    ],
+    "seizure_probability": 0.39519415710092287,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:35"
+  },
+  {
+    "data_preview": [
+      23,
+      28,
+      23,
+      24,
+      26,
+      20,
+      15,
+      8,
+      0,
+      -11
+    ],
+    "seizure_probability": 0.3960474338789936,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:36"
+  },
+  {
+    "data_preview": [
+      -10,
+      -3,
+      7,
+      11,
+      12,
+      3,
+      -5,
+      -14,
+      -21,
+      -21
+    ],
+    "seizure_probability": 0.3176767169323284,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:36"
+  },
+  {
+    "data_preview": [
+      18,
+      6,
+      2,
+      0,
+      -5,
+      -7,
+      4,
+      6,
+      2,
+      -2
+    ],
+    "seizure_probability": 0.21816043544677086,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:36"
+  },
+  {
+    "data_preview": [
+      9,
+      2,
+      -6,
+      -9,
+      -7,
+      -6,
+      -12,
+      -14,
+      -17,
+      -13
+    ],
+    "seizure_probability": 0.12280511662538629,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:36"
+  },
+  {
+    "data_preview": [
+      -2,
+      -20,
+      -25,
+      -24,
+      -30,
+      -41,
+      -46,
+      -34,
+      -27,
+      -7
+    ],
+    "seizure_probability": 0.054558111561345865,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:36"
+  },
+  {
+    "data_preview": [
+      -46,
+      -51,
+      -46,
+      -31,
+      -14,
+      -2,
+      0,
+      -12,
+      -16,
+      -24
+    ],
+    "seizure_probability": 0.05350101819203701,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:36"
+  },
+  {
+    "data_preview": [
+      -13,
+      -9,
+      -2,
+      7,
+      16,
+      24,
+      28,
+      37,
+      41,
+      45
+    ],
+    "seizure_probability": 0.05346029238135088,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:36"
+  },
+  {
+    "data_preview": [
+      -38,
+      -36,
+      -32,
+      -37,
+      -37,
+      -26,
+      -23,
+      -15,
+      0,
+      5
+    ],
+    "seizure_probability": 0.05353864047501702,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:37"
+  },
+  {
+    "data_preview": [
+      13,
+      6,
+      0,
+      -10,
+      -16,
+      -18,
+      -15,
+      -11,
+      -7,
+      -5
+    ],
+    "seizure_probability": 0.05265045611013193,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:37"
+  },
+  {
+    "data_preview": [
+      -50,
+      -49,
+      -49,
+      -36,
+      -24,
+      -21,
+      -25,
+      -26,
+      -29,
+      -35
+    ],
+    "seizure_probability": 0.0025494543631793933,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:37"
+  },
+  {
+    "data_preview": [
+      3,
+      -3,
+      2,
+      4,
+      2,
+      -4,
+      -12,
+      -14,
+      -7,
+      -2
+    ],
+    "seizure_probability": 0.001921884369221516,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:37"
+  },
+  {
+    "data_preview": [
+      -2,
+      6,
+      7,
+      2,
+      0,
+      4,
+      -1,
+      -12,
+      -22,
+      -33
+    ],
+    "seizure_probability": 0.0019311270516482182,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:37"
+  },
+  {
+    "data_preview": [
+      6,
+      12,
+      13,
+      10,
+      0,
+      -10,
+      -17,
+      -17,
+      -10,
+      0
+    ],
+    "seizure_probability": 0.0019209467369364574,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:37"
+  },
+  {
+    "data_preview": [
+      36,
+      36,
+      37,
+      35,
+      26,
+      27,
+      23,
+      19,
+      15,
+      8
+    ],
+    "seizure_probability": 0.0019096049276413397,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:37"
+  },
+  {
+    "data_preview": [
+      -31,
+      -27,
+      -19,
+      -15,
+      -15,
+      -19,
+      -17,
+      -17,
+      -22,
+      -17
+    ],
+    "seizure_probability": 0.0013555931320297532,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:38"
+  },
+  {
+    "data_preview": [
+      -32,
+      -33,
+      -32,
+      -27,
+      -14,
+      3,
+      9,
+      -4,
+      -6,
+      -2
+    ],
+    "seizure_probability": 0.0012944590795086696,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:38"
+  },
+  {
+    "data_preview": [
+      4,
+      5,
+      8,
+      13,
+      16,
+      11,
+      3,
+      -10,
+      -18,
+      -27
+    ],
+    "seizure_probability": 0.0012662344670388848,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:38"
+  },
+  {
+    "data_preview": [
+      32,
+      26,
+      20,
+      15,
+      12,
+      11,
+      20,
+      32,
+      36,
+      28
+    ],
+    "seizure_probability": 0.0008599898617831058,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:38"
+  },
+  {
+    "data_preview": [
+      14,
+      23,
+      37,
+      52,
+      62,
+      72,
+      78,
+      69,
+      60,
+      58
+    ],
+    "seizure_probability": 0.0007731994177447632,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:38"
+  },
+  {
+    "data_preview": [
+      -12,
+      -7,
+      -1,
+      3,
+      3,
+      5,
+      5,
+      11,
+      16,
+      20
+    ],
+    "seizure_probability": 0.000389618385815993,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:38"
+  },
+  {
+    "data_preview": [
+      -12,
+      -4,
+      3,
+      -2,
+      -13,
+      -18,
+      -19,
+      -15,
+      -7,
+      -1
+    ],
+    "seizure_probability": 0.00019523282535374164,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:38"
+  },
+  {
+    "data_preview": [
+      -1,
+      -4,
+      -11,
+      -16,
+      -27,
+      -31,
+      -25,
+      -21,
+      -16,
+      -23
+    ],
+    "seizure_probability": 0.00019652564224088566,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:39"
+  },
+  {
+    "data_preview": [
+      10,
+      9,
+      10,
+      9,
+      19,
+      24,
+      24,
+      16,
+      11,
+      5
+    ],
+    "seizure_probability": 0.00019927537214243786,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:39"
+  },
+  {
+    "data_preview": [
+      -2,
+      -5,
+      -8,
+      -12,
+      -22,
+      -28,
+      -27,
+      -22,
+      -23,
+      -26
+    ],
+    "seizure_probability": 0.0002896753358072601,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:39"
+  },
+  {
+    "data_preview": [
+      13,
+      14,
+      28,
+      39,
+      39,
+      37,
+      28,
+      20,
+      9,
+      5
+    ],
+    "seizure_probability": 0.0013886547269066796,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:39"
+  },
+  {
+    "data_preview": [
+      -21,
+      -13,
+      -5,
+      0,
+      0,
+      -7,
+      -8,
+      -6,
+      -7,
+      0
+    ],
+    "seizure_probability": 0.0016287464284687303,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:39"
+  },
+  {
+    "data_preview": [
+      -35,
+      -44,
+      -48,
+      -50,
+      -46,
+      -30,
+      -15,
+      -4,
+      1,
+      4
+    ],
+    "seizure_probability": 0.0016817308627651074,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:39"
+  },
+  {
+    "data_preview": [
+      47,
+      45,
+      39,
+      27,
+      23,
+      19,
+      18,
+      13,
+      11,
+      17
+    ],
+    "seizure_probability": 0.0016884208511328326,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:39"
+  },
+  {
+    "data_preview": [
+      10,
+      13,
+      17,
+      10,
+      5,
+      6,
+      7,
+      12,
+      13,
+      9
+    ],
+    "seizure_probability": 0.001696824909595307,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:40"
+  },
+  {
+    "data_preview": [
+      -22,
+      -30,
+      -31,
+      -30,
+      -27,
+      -32,
+      -28,
+      -16,
+      -6,
+      2
+    ],
+    "seizure_probability": 0.0020347197729279286,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:40"
+  },
+  {
+    "data_preview": [
+      -62,
+      -59,
+      -43,
+      -38,
+      -30,
+      -20,
+      -13,
+      -10,
+      -8,
+      -3
+    ],
+    "seizure_probability": 0.0019978831987828016,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:40"
+  },
+  {
+    "data_preview": [
+      -37,
+      -35,
+      -28,
+      -25,
+      -16,
+      -7,
+      -5,
+      0,
+      -4,
+      -8
+    ],
+    "seizure_probability": 0.001990317970921751,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:40"
+  },
+  {
+    "data_preview": [
+      -21,
+      -21,
+      -12,
+      -21,
+      -39,
+      -39,
+      -37,
+      -35,
+      -39,
+      -48
+    ],
+    "seizure_probability": 0.00199572880519554,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:40"
+  },
+  {
+    "data_preview": [
+      -46,
+      -55,
+      -61,
+      -61,
+      -61,
+      -59,
+      -58,
+      -55,
+      -42,
+      -29
+    ],
+    "seizure_probability": 0.0019083039311226456,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:40"
+  },
+  {
+    "data_preview": [
+      -34,
+      -21,
+      -23,
+      -25,
+      -23,
+      -19,
+      -16,
+      -9,
+      -4,
+      0
+    ],
+    "seizure_probability": 0.0008165625724359416,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:40"
+  },
+  {
+    "data_preview": [
+      -28,
+      -21,
+      -11,
+      -8,
+      -7,
+      -19,
+      -35,
+      -45,
+      -42,
+      -41
+    ],
+    "seizure_probability": 0.0005821939746965654,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:41"
+  },
+  {
+    "data_preview": [
+      -30,
+      -24,
+      -11,
+      1,
+      5,
+      5,
+      -1,
+      -11,
+      -12,
+      -3
+    ],
+    "seizure_probability": 0.0005212343938183039,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:41"
+  },
+  {
+    "data_preview": [
+      5,
+      17,
+      12,
+      10,
+      6,
+      6,
+      12,
+      14,
+      9,
+      2
+    ],
+    "seizure_probability": 0.0005196270605665632,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:41"
+  },
+  {
+    "data_preview": [
+      -34,
+      -38,
+      -31,
+      -28,
+      -29,
+      -27,
+      -27,
+      -34,
+      -37,
+      -41
+    ],
+    "seizure_probability": 0.07888240204047178,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:41"
+  },
+  {
+    "data_preview": [
+      30,
+      24,
+      19,
+      11,
+      3,
+      1,
+      -4,
+      1,
+      7,
+      10
+    ],
+    "seizure_probability": 0.17807016447040952,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:41"
+  },
+  {
+    "data_preview": [
+      26,
+      28,
+      36,
+      46,
+      48,
+      49,
+      64,
+      70,
+      86,
+      91
+    ],
+    "seizure_probability": 0.27343279060442,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:41"
+  },
+  {
+    "data_preview": [
+      2,
+      2,
+      5,
+      2,
+      -2,
+      -1,
+      -9,
+      -18,
+      -17,
+      -11
+    ],
+    "seizure_probability": 0.34223200099804674,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:41"
+  },
+  {
+    "data_preview": [
+      -34,
+      -25,
+      -14,
+      -10,
+      -4,
+      4,
+      9,
+      12,
+      9,
+      9
+    ],
+    "seizure_probability": 0.3433430870747543,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:42"
+  },
+  {
+    "data_preview": [
+      -21,
+      -27,
+      -37,
+      -36,
+      -27,
+      -18,
+      -19,
+      -13,
+      -8,
+      -2
+    ],
+    "seizure_probability": 0.3434247572891763,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:42"
+  },
+  {
+    "data_preview": [
+      6,
+      -4,
+      -10,
+      -13,
+      -24,
+      -29,
+      -24,
+      -22,
+      -18,
+      -21
+    ],
+    "seizure_probability": 0.3437467987940181,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:42"
+  },
+  {
+    "data_preview": [
+      -84,
+      -72,
+      -65,
+      -67,
+      -65,
+      -62,
+      -67,
+      -79,
+      -86,
+      -89
+    ],
+    "seizure_probability": 0.34471493879973425,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:42"
+  },
+  {
+    "data_preview": [
+      12,
+      15,
+      14,
+      14,
+      14,
+      5,
+      4,
+      13,
+      17,
+      16
+    ],
+    "seizure_probability": 0.39519415710092287,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:42"
+  },
+  {
+    "data_preview": [
+      23,
+      28,
+      23,
+      24,
+      26,
+      20,
+      15,
+      8,
+      0,
+      -11
+    ],
+    "seizure_probability": 0.3960474338789936,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:42"
+  },
+  {
+    "data_preview": [
+      -10,
+      -3,
+      7,
+      11,
+      12,
+      3,
+      -5,
+      -14,
+      -21,
+      -21
+    ],
+    "seizure_probability": 0.3176767169323284,
+    "seizure_detected": false,
+    "consecutive_detections": 0,
+    "timestamp": "2024-11-15 18:46:42"
+  }
+]
