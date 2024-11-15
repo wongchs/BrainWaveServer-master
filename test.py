@@ -1,7 +1,7 @@
 import asyncio
 import json
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import scipy.io
 import numpy as np
 import tensorflow as tf
@@ -117,11 +117,6 @@ class EEGDataReader:
             self.base_path, 
             f'Patient_{patient_num}_{segment_type}_segment_{str(segment_num).zfill(4)}.mat'
         )
-        # self.base_path = f'./kaggle/input/seizure-prediction/Dog_{patient_num}/Dog_{patient_num}/'
-        # self.file_path = os.path.join(
-        #     self.base_path, 
-        #     f'Dog_{patient_num}_{segment_type}_segment_{str(segment_num).zfill(4)}.mat'
-        # )
         self.current_position = 0
         self.load_data()
         
@@ -162,6 +157,8 @@ class SeizureAlertServer:
         self.detector = detector
         self.data_reader = data_reader
         self.alert_history = []
+        self.last_alert_time = None
+        self.alert_cooldown = timedelta(seconds=30)  # 30-second cooldown period
         
     def handle_client(self, client_sock, client_info):
         """Handle individual client connection with real-time seizure detection"""
@@ -183,8 +180,19 @@ class SeizureAlertServer:
                 else:
                     consecutive_detections = 0
                 
-                # Determine if this is a true detection
-                true_detection = consecutive_detections >= min_consecutive_detections
+                current_time = datetime.now()
+                
+                # Check if we're in the cooldown period
+                in_cooldown = (
+                    self.last_alert_time is not None and 
+                    current_time - self.last_alert_time < self.alert_cooldown
+                )
+                
+                # Determine if this is a true detection AND we're not in cooldown
+                true_detection = (
+                    consecutive_detections >= min_consecutive_detections and 
+                    not in_cooldown
+                )
                 
                 # Prepare data for sending
                 alert_data = {
@@ -192,26 +200,33 @@ class SeizureAlertServer:
                     "seizure_probability": float(seizure_prob),
                     "seizure_detected": true_detection,
                     "consecutive_detections": consecutive_detections,
-                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    "timestamp": current_time.strftime("%Y-%m-%d %H:%M:%S"),
+                    "in_cooldown": in_cooldown
                 }
                 
-                # Log alert
+                # Log alert and update last alert time if true detection
+                if true_detection:
+                    self.last_alert_time = current_time
+                    print(f"\n⚠️ SEIZURE ALERT! Probability: {seizure_prob:.3f}")
+                    print(f"Timestamp: {alert_data['timestamp']}")
+                    print("Data preview:", alert_data["data"])
+                    print("-" * 50)
+                
                 self.alert_history.append(alert_data)
                 
                 # Convert to JSON and send
                 json_data = json.dumps(alert_data)
                 client_sock.send(json_data.encode())
                 
-                # Print status
-                print(f"\rCurrent seizure probability: {seizure_prob:.3f} "
-                      f"(Consecutive detections: {consecutive_detections})", end="")
+                # Print status with cooldown information
+                cooldown_remaining = ""
+                if in_cooldown:
+                    remaining = self.alert_cooldown - (current_time - self.last_alert_time)
+                    cooldown_remaining = f" (Cooldown: {remaining.seconds}s remaining)"
                 
-                # If true detection, print warning
-                if true_detection:
-                    print(f"\n⚠️ SEIZURE ALERT! Probability: {seizure_prob:.3f}")
-                    print(f"Timestamp: {alert_data['timestamp']}")
-                    print("Data preview:", alert_data["data"])
-                    print("-" * 50)
+                print(f"\rCurrent seizure probability: {seizure_prob:.3f} "
+                      f"(Consecutive detections: {consecutive_detections})"
+                      f"{cooldown_remaining}", end="")
                 
                 # Small delay to prevent overwhelming the connection
                 time.sleep(0.1)
