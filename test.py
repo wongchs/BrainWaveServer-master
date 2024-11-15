@@ -153,23 +153,34 @@ class EEGDataReader:
             raise
 
 class SeizureAlertServer:
-    def __init__(self, detector, data_reader):
+    def __init__(self, detector, data_reader, 
+                 data_interval=1.0,          # Time between data transmissions (seconds)
+                 sampling_window=5000,       # Number of samples to process at once
+                 max_preview_samples=10):    # Number of samples to send in preview
         self.detector = detector
         self.data_reader = data_reader
         self.alert_history = []
         self.last_alert_time = None
-        self.alert_cooldown = timedelta(seconds=30)  # 30-second cooldown period
+        self.alert_cooldown = timedelta(seconds=30)
+        
+        # New parameters for controlling data rate
+        self.data_interval = data_interval
+        self.sampling_window = sampling_window
+        self.max_preview_samples = max_preview_samples
         
     def handle_client(self, client_sock, client_info):
         """Handle individual client connection with real-time seizure detection"""
         print(f"Handling connection from {client_info}")
+        print(f"Data transmission interval: {self.data_interval} seconds")
         consecutive_detections = 0
-        min_consecutive_detections = 3  # Number of consecutive detections needed for alert
+        min_consecutive_detections = 3
         
         try:
             while True:
-                # Get 1 second of EEG data (5000 samples at 5000 Hz)
-                data_chunk = self.data_reader.get_chunk()
+                loop_start_time = time.time()
+                
+                # Get EEG data chunk
+                data_chunk = self.data_reader.get_chunk(self.sampling_window)
                 
                 # Get seizure probability from model
                 seizure_prob = self.detector.predict(data_chunk)
@@ -194,14 +205,15 @@ class SeizureAlertServer:
                     not in_cooldown
                 )
                 
-                # Prepare data for sending
+                # Prepare data for sending (with limited preview samples)
                 alert_data = {
-                    "data": data_chunk[:10].tolist(),  # Send first 10 samples as preview
+                    "data": data_chunk[:self.max_preview_samples].tolist(),
                     "seizure_probability": float(seizure_prob),
                     "seizure_detected": true_detection,
                     "consecutive_detections": consecutive_detections,
                     "timestamp": current_time.strftime("%Y-%m-%d %H:%M:%S"),
-                    "in_cooldown": in_cooldown
+                    "in_cooldown": in_cooldown,
+                    "sampling_rate": f"{1/self.data_interval:.2f} Hz"
                 }
                 
                 # Log alert and update last alert time if true detection
@@ -228,8 +240,12 @@ class SeizureAlertServer:
                       f"(Consecutive detections: {consecutive_detections})"
                       f"{cooldown_remaining}", end="")
                 
-                # Small delay to prevent overwhelming the connection
-                time.sleep(0.1)
+                # Calculate remaining time to wait
+                processing_time = time.time() - loop_start_time
+                wait_time = max(0, self.data_interval - processing_time)
+                
+                # Sleep for the remaining time to maintain consistent interval
+                time.sleep(wait_time)
                 
         except Exception as e:
             print(f"\nError handling client {client_info}: {str(e)}")
