@@ -38,8 +38,9 @@ def load_patient_data(patient_num, types, num_segments):
             k = typ.replace(f'Patient_{patient_num}_', '') + '_'
             d_array = data[k + str(j + 1)][0][0][0]
             
-            lst = list(range(3000000))  # Adjust for 10 minutes
-            for m in lst[::5000]:  # Create a spectrogram every 1 second (5000 samples)
+            lst = list(range(3000000))
+            #  Create a spectrogram every 1 second (5000 samples)
+            for m in lst[::5000]:
                 p_secs = d_array[0][m:m+5000]
                 p_f, p_t, p_Sxx = spectrogram(p_secs, fs=5000, return_onesided=False)
                 p_SS = np.log1p(p_Sxx)
