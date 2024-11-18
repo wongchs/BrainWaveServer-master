@@ -28,7 +28,7 @@ class SeizureDetector:
     def __init__(self, model_path='seizure_detection_model.keras'):
         print("Loading seizure detection model...")
         self.model = tf.keras.models.load_model(model_path)
-        self.threshold = 0.8
+        self.threshold = 0.96
         self.prediction_window = []
         self.window_size = 10
         self.consecutive_detections = 0
@@ -200,18 +200,32 @@ class AsyncioThread(threading.Thread):
 def handle_client(client_sock, client_info, board, esp32_manager, seizure_detector):
     print(f"Handling connection from {client_info}")
     
+    # Ganglion scaling factor from BrainFlow docs
+    # Convert from raw ADC to microvolts
+    SCALE_FACTOR_EEG = (1.2 * 1000000) / (8388607.0 * 1.5 * 51.0)
+    
     try:
         while True:
             data = board.get_current_board_data(10)
             if data is not None and data.size > 0:
-                data_list = data[0, :10].tolist()
+                # Get data from channel 3 (index 2) and scale to microvolts
+                raw_data = data[2, :10]
+                channel3_data = [val * SCALE_FACTOR_EEG for val in raw_data]
+                
+                # Optional: Apply additional signal processing
+                # You might want to add bandpass filtering here
+                # Example: 0.5-50Hz bandpass filter for typical EEG
+                for i in range(len(channel3_data)):
+                    if abs(channel3_data[i]) > 1000:  # Basic artifact rejection
+                        channel3_data[i] = 0  # or use previous valid value
                 
                 # Use the ML model for seizure detection
-                detection_result = seizure_detector.predict(data[0])
+                detection_result = seizure_detector.predict(channel3_data)
                 
                 timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 json_data = json.dumps({
-                    "data": data_list,
+                    "data": channel3_data,
+                    "raw_data": raw_data.tolist(),  # Including raw data for debugging
                     "seizure_detected": detection_result["detection"],
                     "seizure_probability": detection_result["probability"],
                     "consecutive_detections": detection_result["consecutive_detections"],
@@ -232,9 +246,10 @@ def handle_client(client_sock, client_info, board, esp32_manager, seizure_detect
                 
                 client_sock.send(json_data.encode())
                 
-                # Print status update
+                # Print status update with both raw and scaled values
                 cooldown_str = " (in cooldown)" if detection_result["in_cooldown"] else ""
-                print(f"\rProbability: {detection_result['probability']:.3f}, "
+                print(f"\rChannel 3 | Raw: {raw_data[0]:.2f} | µV: {channel3_data[0]:.2f} | "
+                      f"Probability: {detection_result['probability']:.3f}, "
                       f"Consecutive detections: {detection_result['consecutive_detections']}"
                       f"{cooldown_str}", end="")
 
@@ -244,8 +259,31 @@ def handle_client(client_sock, client_info, board, esp32_manager, seizure_detect
         print(f"Error in handle_client: {str(e)}")
     finally:
         client_sock.close()
-        print(f"Connection closed with {client_info}")
+        print(f"\nConnection closed with {client_info}")
 
+def apply_bandpass_filter(data, sampling_rate=200):
+    """
+    Apply bandpass filter to EEG data
+    Sampling rate for Ganglion is 200Hz by default
+    """
+    try:
+        from brainflow.data_filter import DataFilter, FilterTypes
+        
+        # Apply bandpass filter (0.5-50Hz is typical for EEG)
+        DataFilter.perform_bandpass(
+            data,
+            sampling_rate,
+            2.0,  # center frequency
+            4.0,  # band width
+            4,    # order
+            FilterTypes.BUTTERWORTH.value,
+            0     # ripple
+        )
+        return data
+    except Exception as e:
+        print(f"Error applying filter: {e}")
+        return data
+    
 def start_bluetooth_server(board):
     # Initialize ESP32 manager
     esp32_mac = "08:B6:1F:B9:36:76"  # Your ESP32's MAC address

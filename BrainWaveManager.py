@@ -9,28 +9,7 @@ def release_board(board):
     board.release_session()
 
 
-def connect_to_board(mac_address, serial_number, serial_port, timeout=0, ip_port=0, ip_protocol=0, board_id=1,
-                     log=True):
-    """
-    parser = argparse.ArgumentParser()
-    # use docs to check which parameters are required for specific board, e.g. for Cyton - set serial port
-    parser.add_argument('--timeout', type=int, help='timeout for device discovery or connection', required=False,
-                        default=0)
-    parser.add_argument('--ip-port', type=int, help='ip port', required=False, default=0)
-    parser.add_argument('--ip-protocol', type=int, help='ip protocol, check IpProtocolType enum', required=False,
-                        default=0)
-    parser.add_argument('--ip-address', type=str, help='ip address', required=False, default='')
-    parser.add_argument('--serial-port', type=str, help='serial port', required=False, default='')
-    parser.add_argument('--mac-address', type=str, help='mac address', required=False, default='')
-    parser.add_argument('--other-info', type=str, help='other info', required=False, default='')
-    parser.add_argument('--streamer-params', type=str, help='streamer params', required=False, default='')
-    parser.add_argument('--serial-number', type=str, help='serial number', required=False, default='')
-    parser.add_argument('--board-id', type=int, help='board id, check docs to get a list of supported boards',
-                        required=True)
-    parser.add_argument('--file', type=str, help='file', required=False, default='')
-    parser.add_argument('--log', action='store_true')
-    args = parser.parse_args()"""
-
+def connect_to_board(mac_address, serial_number, serial_port, timeout=0, ip_port=0, ip_protocol=0, board_id=1, log=True):
     params = BrainFlowInputParams()
     params.ip_port = ip_port
     params.serial_port = serial_port
@@ -48,6 +27,27 @@ def connect_to_board(mac_address, serial_number, serial_port, timeout=0, ip_port
     board = BoardShim(board_id, params)
     board.prepare_session()
     return board
+
+def get_selected_channels_data(board, channels=[1, 2, 3], num_samples=20):
+    """
+    Get data from specified EEG channels
+    
+    Args:
+        board: BoardShim instance
+        channels: List of channel indices (0-based) to read from
+        num_samples: Number of samples to get
+    
+    Returns:
+        numpy array with selected channel data
+    """
+    data = board.get_current_board_data(num_samples)
+    if data is not None and data.size > 0:
+        # Get all EEG channels available on Ganglion
+        eeg_channels = BoardShim.get_eeg_channels(BoardIds.GANGLION_BOARD.value)
+        # Select only the requested channels
+        selected_channels = [eeg_channels[i] for i in channels if i < len(eeg_channels)]
+        return data[selected_channels]
+    return None
 
 
 def write_as_csv(data):
