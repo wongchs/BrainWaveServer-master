@@ -220,6 +220,10 @@ def handle_client(client_sock, client_info, board, esp32_manager, seizure_detect
             # Get new data
             data = board.get_current_board_data(10)
             
+            if len(buffer) > 10000:  # 2x window size
+                print("\nWarning: Buffer overflow, resetting buffer")
+                buffer = buffer[-5000:]  # Keep only the most recent window
+            
             if data is not None and data.size > 0:
                 # Extract channel 3 (index 2) data and add to buffer
                 new_samples = data[2, :].tolist()
