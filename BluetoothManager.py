@@ -42,19 +42,26 @@ class SeizureDetector:
         try:
             # Ensure the data is the right shape and type
             eeg_data = np.array(eeg_data, dtype=np.float32)
-            if len(eeg_data.shape) > 1:
-                eeg_data = eeg_data.flatten()
+            if len(eeg_data) < 5000:
+            # Pad if less than 5000 samples
+                eeg_data = np.pad(eeg_data, (0, 5000 - len(eeg_data)), mode='constant')
+            elif len(eeg_data) > 5000:
+                # Truncate if more than 5000 samples
+                eeg_data = eeg_data[:5000]
+
             
             # Calculate spectrogram with exactly the same parameters as training
             f, t, Sxx = spectrogram(
                 eeg_data,
-                fs=5000,
-                return_onesided=False  # Match training parameters exactly
+                fs=5000,  # Match sampling rate used in training
+                nperseg=256,  # Match training window size
+                noverlap=128,  # Match training overlap
+                return_onesided=False  # Match training parameter
             )
             
             # Take log and normalize exactly as in training
             Sxx = np.log1p(Sxx)
-            Sxx = Sxx / np.max(Sxx)
+            Sxx = Sxx / np.max(Sxx) if np.max(Sxx) != 0 else Sxx
             
             # Ensure we have correct dimensions (256, 22)
             if Sxx.shape[0] != 22 or Sxx.shape[1] != 256:
@@ -204,63 +211,88 @@ def handle_client(client_sock, client_info, board, esp32_manager, seizure_detect
     # Convert from raw ADC to microvolts
     SCALE_FACTOR_EEG = (1.2 * 1000000) / (8388607.0 * 1.5 * 51.0)
     
+    # Initialize buffer for collecting samples
+    buffer = []
+    last_sent_time = time.time()
+    
     try:
         while True:
+            # Get new data
             data = board.get_current_board_data(10)
+            
             if data is not None and data.size > 0:
-                # Get data from channel 3 (index 2) and scale to microvolts
-                raw_data = data[2, :10]
-                channel3_data = [val * SCALE_FACTOR_EEG for val in raw_data]
+                # Extract channel 3 (index 2) data and add to buffer
+                new_samples = data[2, :].tolist()
+                buffer.extend([val * SCALE_FACTOR_EEG for val in new_samples])
                 
-                # Optional: Apply additional signal processing
-                # You might want to add bandpass filtering here
-                # Example: 0.5-50Hz bandpass filter for typical EEG
-                for i in range(len(channel3_data)):
-                    if abs(channel3_data[i]) > 1000:  # Basic artifact rejection
-                        channel3_data[i] = 0  # or use previous valid value
-                
-                # Use the ML model for seizure detection
-                detection_result = seizure_detector.predict(channel3_data)
-                
-                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                json_data = json.dumps({
-                    "data": channel3_data,
-                    "raw_data": raw_data.tolist(),  # Including raw data for debugging
-                    "seizure_detected": detection_result["detection"],
-                    "seizure_probability": detection_result["probability"],
-                    "consecutive_detections": detection_result["consecutive_detections"],
-                    "in_cooldown": detection_result["in_cooldown"],
-                    "timestamp": timestamp
-                })
-                
-                # Send alert to ESP32 if seizure detected
-                if detection_result["detection"] and esp32_manager.connected:
-                    future = asyncio.run_coroutine_threadsafe(
-                        esp32_manager.send_alert(),
-                        esp32_manager.loop
-                    )
+                # Process when we have enough data (5000 samples)
+                if len(buffer) >= 5000:
                     try:
-                        future.result(timeout=5)
+                        # Get 5000 samples for processing
+                        channel3_data = buffer[:5000]
+                        
+                        # Slide buffer with 50% overlap (2500 samples)
+                        buffer = buffer[2500:]
+                        
+                        # Optional: Basic artifact rejection
+                        channel3_data = [
+                            0 if abs(val) > 1000 else val 
+                            for val in channel3_data
+                        ]
+                        
+                        # Use the ML model for seizure detection
+                        detection_result = seizure_detector.predict(channel3_data)
+                        
+                        # Create JSON payload
+                        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        json_data = json.dumps({
+                            "data": channel3_data[:10],  # First 10 samples for visualization
+                            "seizure_detected": detection_result["detection"],
+                            "seizure_probability": detection_result["probability"],
+                            "consecutive_detections": detection_result["consecutive_detections"],
+                            "in_cooldown": detection_result["in_cooldown"],
+                            "timestamp": timestamp
+                        })
+                        
+                        # Send data to client (limit rate to once per second)
+                        current_time = time.time()
+                        if current_time - last_sent_time >= 1.0:
+                            client_sock.send(json_data.encode())
+                            last_sent_time = current_time
+                        
+                        # Send alert to ESP32 if seizure detected
+                        if detection_result["detection"] and esp32_manager.connected:
+                            future = asyncio.run_coroutine_threadsafe(
+                                esp32_manager.send_alert(),
+                                esp32_manager.loop
+                            )
+                            try:
+                                future.result(timeout=5)
+                            except Exception as e:
+                                print(f"Failed to send alert: {str(e)}")
+                        
+                        # Print status update
+                        cooldown_str = " (in cooldown)" if detection_result["in_cooldown"] else ""
+                        print(f"\rBuffer size: {len(buffer)} | "
+                              f"Latest value: {channel3_data[0]:.2f}µV | "
+                              f"Probability: {detection_result['probability']:.3f} | "
+                              f"Consecutive: {detection_result['consecutive_detections']}"
+                              f"{cooldown_str}", end="")
+                        
                     except Exception as e:
-                        print(f"Failed to send alert: {str(e)}")
-                
-                client_sock.send(json_data.encode())
-                
-                # Print status update with both raw and scaled values
-                cooldown_str = " (in cooldown)" if detection_result["in_cooldown"] else ""
-                print(f"\rChannel 3 | Raw: {raw_data[0]:.2f} | µV: {channel3_data[0]:.2f} | "
-                      f"Probability: {detection_result['probability']:.3f}, "
-                      f"Consecutive detections: {detection_result['consecutive_detections']}"
-                      f"{cooldown_str}", end="")
-
-            time.sleep(1)
+                        print(f"\nError processing data: {str(e)}")
+                        continue
+            
+            # Small sleep to prevent CPU overload
+            time.sleep(0.01)
             
     except Exception as e:
-        print(f"Error in handle_client: {str(e)}")
+        print(f"\nError in handle_client: {str(e)}")
     finally:
         client_sock.close()
         print(f"\nConnection closed with {client_info}")
-
+        
+        
 def apply_bandpass_filter(data, sampling_rate=200):
     """
     Apply bandpass filter to EEG data
