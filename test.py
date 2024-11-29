@@ -181,17 +181,17 @@ class SeizureDetector:
 
 class EEGDataReader:
     def __init__(self, patient_num, segment_type='preictal', segment_num=1):
-        self.base_path = f'./kaggle/input/seizure-prediction/Patient_{patient_num}/Patient_{patient_num}/'
-        self.file_path = os.path.join(
-            self.base_path, 
-            f'Patient_{patient_num}_{segment_type}_segment_{str(segment_num).zfill(4)}.mat'
-        )
-        
-        # self.base_path = f'./kaggle/input/seizure-prediction/Dog_{patient_num}/Dog_{patient_num}/'
+        # self.base_path = f'./kaggle/input/seizure-prediction/Patient_{patient_num}/Patient_{patient_num}/'
         # self.file_path = os.path.join(
         #     self.base_path, 
-        #     f'Dog_{patient_num}_{segment_type}_segment_{str(segment_num).zfill(4)}.mat'
+        #     f'Patient_{patient_num}_{segment_type}_segment_{str(segment_num).zfill(4)}.mat'
         # )
+        
+        self.base_path = f'./kaggle/input/seizure-prediction/Dog_{patient_num}/Dog_{patient_num}/'
+        self.file_path = os.path.join(
+            self.base_path, 
+            f'Dog_{patient_num}_{segment_type}_segment_{str(segment_num).zfill(4)}.mat'
+        )
 
         self.current_position = 0
         self.load_data()

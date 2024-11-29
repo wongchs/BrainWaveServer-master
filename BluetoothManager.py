@@ -209,7 +209,7 @@ def handle_client(client_sock, client_info, board, esp32_manager, seizure_detect
     
     # Ganglion scaling factor from BrainFlow docs
     # Convert from raw ADC to microvolts
-    SCALE_FACTOR_EEG = (1.2 * 1000000) / (8388607.0 * 1.5 * 51.0)
+    SCALE_FACTOR_EEG = (1.2 * 1000000) / (8388607.0 * 1.5 * 51.0) * 10
     
     # Initialize buffer for collecting samples
     buffer = []
