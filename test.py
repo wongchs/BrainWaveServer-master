@@ -1,14 +1,98 @@
-import asyncio
+import tensorflow as tf
+import numpy as np
+import scipy
 import json
 import time
-from datetime import datetime, timedelta
-import scipy.io
-import numpy as np
-import tensorflow as tf
-from scipy.signal import spectrogram
-import os
-import bluetooth
 import threading
+import bluetooth
+import asyncio
+from datetime import datetime, timedelta
+from scipy.signal import spectrogram
+from bleak import BleakClient, BleakScanner
+import os
+
+class AsyncioThread(threading.Thread):
+    def __init__(self):
+        super().__init__()
+        self.loop = None
+        self.started = threading.Event()
+        self.daemon = True
+
+    def run(self):
+        self.loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(self.loop)
+        self.started.set()
+        self.loop.run_forever()
+
+class ESP32BLEManager:
+    def __init__(self, esp32_mac):
+        self.esp32_mac = esp32_mac
+        self.client = None
+        self.connected = False
+        self.lock = threading.Lock()
+        self.notification_characteristic = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
+        self.write_characteristic = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
+        self.loop = None
+        self.connection_thread = None
+        self.should_retry = True
+
+    async def connect_with_retry(self):
+        """Continuously attempt to connect to ESP32 with retry logic"""
+        while self.should_retry:
+            if not self.connected:
+                try:
+                    print(f"Attempting to connect to ESP32: {self.esp32_mac}")
+                    device = await BleakScanner.find_device_by_address(self.esp32_mac, timeout=20.0)
+                    
+                    if device:
+                        self.client = BleakClient(device)
+                        await self.client.connect()
+                        self.connected = True
+                        print("Successfully connected to ESP32")
+                    else:
+                        print("ESP32 device not found, retrying in 5 seconds...")
+                        await asyncio.sleep(5)
+                        
+                except Exception as e:
+                    print(f"Connection error: {str(e)}, retrying in 5 seconds...")
+                    await asyncio.sleep(5)
+            else:
+                await asyncio.sleep(1)
+    
+    def start_connection_thread(self, loop):
+        """Start a background thread for ESP32 connection attempts"""
+        async def run_connection():
+            await self.connect_with_retry()
+
+        asyncio.run_coroutine_threadsafe(run_connection(), loop)
+
+    async def send_alert(self, message="SEIZURE_DETECTED\n"):
+        """Send alert to ESP32"""
+        if not self.connected or not self.client:
+            print("Not connected to ESP32 - Alert not sent")
+            return False
+
+        try:
+            await self.client.write_gatt_char(
+                self.write_characteristic, 
+                message.encode(),
+                response=True
+            )
+            print(f"Alert sent to ESP32: {message.strip()}")
+            return True
+        except Exception as e:
+            print(f"Failed to send alert: {str(e)}")
+            self.connected = False
+            return False
+
+    async def disconnect(self):
+        """Disconnect from ESP32"""
+        self.should_retry = False
+        if self.client and self.connected:
+            await self.client.disconnect()
+            self.connected = False
+            print("Disconnected from ESP32")
+            
 
 class SeizureDetector:
     def __init__(self, model_path='seizure_detection_model.keras'):
@@ -22,6 +106,7 @@ class SeizureDetector:
     def preprocess_data(self, eeg_data):
         """Preprocess EEG data chunk exactly as done during training"""
         try:
+            # [Previous preprocess_data implementation remains the same...]
             # Ensure the data is the right shape and type
             eeg_data = np.array(eeg_data, dtype=np.float32)
             if len(eeg_data.shape) > 1:
@@ -44,17 +129,13 @@ class SeizureDetector:
                 mode='magnitude'
             )
             
-            print(f"Spectrogram shape before processing: {Sxx.shape}")
-            
-            # Ensure we have correct number of frequency bins
+            # [Rest of the existing preprocess_data implementation...]
             if Sxx.shape[0] != 22:
-                # Create frequency bins using actual frequency values
                 target_freqs = np.linspace(f[0], f[-1], 22)
                 new_Sxx = np.zeros((22, Sxx.shape[1]))
                 
-                # For each target frequency bin
                 for i in range(22):
-                    if i == 21:  # Handle the last bin separately
+                    if i == 21:
                         freq_mask = f >= target_freqs[i]
                     else:
                         freq_mask = (f >= target_freqs[i]) & (f < target_freqs[i + 1])
@@ -62,34 +143,23 @@ class SeizureDetector:
                     if np.any(freq_mask):
                         new_Sxx[i] = np.mean(Sxx[freq_mask], axis=0)
                     else:
-                        # If no frequencies fall in this bin, use nearest neighbor
                         nearest_idx = np.abs(f - target_freqs[i]).argmin()
                         new_Sxx[i] = Sxx[nearest_idx]
                 
                 Sxx = new_Sxx
             
-            # Ensure we have correct number of time bins
             if Sxx.shape[1] != 256:
                 from scipy.ndimage import zoom
                 zoom_factor = (1, 256/Sxx.shape[1])
                 Sxx = zoom(Sxx, zoom_factor, order=1)
             
-            print(f"Spectrogram shape after processing: {Sxx.shape}")
-            
-            # Log transform and normalize
             Sxx = np.log1p(np.abs(Sxx))
             Sxx = (Sxx - np.min(Sxx)) / (np.max(Sxx) - np.min(Sxx) + 1e-8)
             
-            # Reshape for model input
-            arr = Sxx.T.reshape(1, 256, 22, 1)
-            print(f"Final array shape: {arr.shape}")
-            
-            return arr
+            return Sxx.T.reshape(1, 256, 22, 1)
             
         except Exception as e:
             print(f"Error in preprocess_data: {str(e)}")
-            print(f"EEG data shape: {eeg_data.shape}")
-            print(f"EEG data type: {eeg_data.dtype}")
             raise
         
     def predict(self, eeg_data):
@@ -104,7 +174,6 @@ class SeizureDetector:
             if len(self.prediction_window) > self.window_size:
                 self.prediction_window.pop(0)
             
-            # Return average probability over window
             return np.mean(self.prediction_window)
         except Exception as e:
             print(f"Error in predict: {str(e)}")
@@ -112,11 +181,18 @@ class SeizureDetector:
 
 class EEGDataReader:
     def __init__(self, patient_num, segment_type='preictal', segment_num=1):
-        self.base_path = f'./kaggle/input/seizure-prediction/Patient_{patient_num}/Patient_{patient_num}/'
+        # self.base_path = f'./kaggle/input/seizure-prediction/Patient_{patient_num}/Patient_{patient_num}/'
+        # self.file_path = os.path.join(
+        #     self.base_path, 
+        #     f'Patient_{patient_num}_{segment_type}_segment_{str(segment_num).zfill(4)}.mat'
+        # )
+        
+        self.base_path = f'./kaggle/input/seizure-prediction/Dog_{patient_num}/Dog_{patient_num}/'
         self.file_path = os.path.join(
             self.base_path, 
-            f'Patient_{patient_num}_{segment_type}_segment_{str(segment_num).zfill(4)}.mat'
+            f'Dog_{patient_num}_{segment_type}_segment_{str(segment_num).zfill(4)}.mat'
         )
+
         self.current_position = 0
         self.load_data()
         
@@ -153,17 +229,16 @@ class EEGDataReader:
             raise
 
 class SeizureAlertServer:
-    def __init__(self, detector, data_reader, 
-                 data_interval=1.0,          # Time between data transmissions (seconds)
-                 sampling_window=5000,       # Number of samples to process at once
-                 max_preview_samples=10):    # Number of samples to send in preview
+    def __init__(self, detector, data_reader, esp32_manager,
+                 data_interval=1.0,          
+                 sampling_window=5000,       
+                 max_preview_samples=10):    
         self.detector = detector
         self.data_reader = data_reader
+        self.esp32_manager = esp32_manager
         self.alert_history = []
         self.last_alert_time = None
         self.alert_cooldown = timedelta(seconds=30)
-        
-        # New parameters for controlling data rate
         self.data_interval = data_interval
         self.sampling_window = sampling_window
         self.max_preview_samples = max_preview_samples
@@ -171,7 +246,6 @@ class SeizureAlertServer:
     def handle_client(self, client_sock, client_info):
         """Handle individual client connection with real-time seizure detection"""
         print(f"Handling connection from {client_info}")
-        print(f"Data transmission interval: {self.data_interval} seconds")
         consecutive_detections = 0
         min_consecutive_detections = 3
         
@@ -192,20 +266,17 @@ class SeizureAlertServer:
                     consecutive_detections = 0
                 
                 current_time = datetime.now()
-                
-                # Check if we're in the cooldown period
                 in_cooldown = (
                     self.last_alert_time is not None and 
                     current_time - self.last_alert_time < self.alert_cooldown
                 )
                 
-                # Determine if this is a true detection AND we're not in cooldown
                 true_detection = (
                     consecutive_detections >= min_consecutive_detections and 
                     not in_cooldown
                 )
                 
-                # Prepare data for sending (with limited preview samples)
+                # Prepare data for sending
                 alert_data = {
                     "data": data_chunk[:self.max_preview_samples].tolist(),
                     "seizure_probability": float(seizure_prob),
@@ -216,17 +287,26 @@ class SeizureAlertServer:
                     "sampling_rate": f"{1/self.data_interval:.2f} Hz"
                 }
                 
-                # Log alert and update last alert time if true detection
+                # Send alert to ESP32 if seizure detected
                 if true_detection:
                     self.last_alert_time = current_time
                     print(f"\n⚠️ SEIZURE ALERT! Probability: {seizure_prob:.3f}")
                     print(f"Timestamp: {alert_data['timestamp']}")
-                    print("Data preview:", alert_data["data"])
-                    print("-" * 50)
+                    
+                    # Send alert to ESP32
+                    if self.esp32_manager.connected:
+                        future = asyncio.run_coroutine_threadsafe(
+                            self.esp32_manager.send_alert(),
+                            self.esp32_manager.loop
+                        )
+                        try:
+                            future.result(timeout=5)
+                        except Exception as e:
+                            print(f"Failed to send ESP32 alert: {str(e)}")
                 
                 self.alert_history.append(alert_data)
                 
-                # Convert to JSON and send
+                # Send data to client
                 json_data = json.dumps(alert_data)
                 client_sock.send(json_data.encode())
                 
@@ -240,11 +320,9 @@ class SeizureAlertServer:
                       f"(Consecutive detections: {consecutive_detections})"
                       f"{cooldown_remaining}", end="")
                 
-                # Calculate remaining time to wait
+                # Maintain consistent interval
                 processing_time = time.time() - loop_start_time
                 wait_time = max(0, self.data_interval - processing_time)
-                
-                # Sleep for the remaining time to maintain consistent interval
                 time.sleep(wait_time)
                 
         except Exception as e:
@@ -260,7 +338,6 @@ class SeizureAlertServer:
         server_sock.bind(("", port))
         server_sock.listen(5)
 
-        # Set up Bluetooth service
         uuid = "00001101-0000-1000-8000-00805F9B34FB"
         bluetooth.advertise_service(
             server_sock, 
@@ -278,7 +355,6 @@ class SeizureAlertServer:
             while True:
                 client_sock, client_info = server_sock.accept()
                 print(f"Accepted connection from {client_info}")
-                # Handle each client in a separate thread
                 client_thread = threading.Thread(
                     target=self.handle_client,
                     args=(client_sock, client_info)
@@ -287,20 +363,48 @@ class SeizureAlertServer:
         except KeyboardInterrupt:
             print("\nServer stopped by user")
         finally:
+            # Clean up ESP32 connection
+            future = asyncio.run_coroutine_threadsafe(
+                self.esp32_manager.disconnect(),
+                self.esp32_manager.loop
+            )
+            try:
+                future.result(timeout=5)
+            except Exception as e:
+                print(f"Error during ESP32 disconnect: {str(e)}")
+            
             server_sock.close()
             print("Server stopped")
 
 def main():
     try:
-        # Initialize components
+        # Create and start asyncio thread
+        asyncio_thread = AsyncioThread()
+        asyncio_thread.start()
+        asyncio_thread.started.wait()
+        
+        # Initialize ESP32 manager
+        esp32_mac = "08:B6:1F:B9:36:76"  # Your ESP32's MAC address
+        esp32_manager = ESP32BLEManager(esp32_mac)
+        esp32_manager.loop = asyncio_thread.loop
+        
+        # Start ESP32 connection attempts in background
+        esp32_manager.start_connection_thread(asyncio_thread.loop)
+        
+        # Initialize other components
         detector = SeizureDetector('seizure_detection_model.keras')
-        data_reader = EEGDataReader(patient_num=1)  # Using Patient 1's data
-        server = SeizureAlertServer(detector, data_reader)
+        data_reader = EEGDataReader(patient_num=1)
+        server = SeizureAlertServer(detector, data_reader, esp32_manager)
         
         # Start server
         server.start()
+        
     except Exception as e:
         print(f"Fatal error in main: {str(e)}")
+    finally:
+        # Stop asyncio loop
+        if asyncio_thread and asyncio_thread.loop:
+            asyncio_thread.loop.call_soon_threadsafe(asyncio_thread.loop.stop)
 
 if __name__ == "__main__":
     main()
